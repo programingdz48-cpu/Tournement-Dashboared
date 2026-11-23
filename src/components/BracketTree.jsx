@@ -27,7 +27,6 @@ function TreeNode({
   }
 
   // Recursive case: Round > 0
-  // Left side has the two feeder matches from roundIndex - 1
   const childMatchIndex1 = 2 * matchIndex;
   const childMatchIndex2 = 2 * matchIndex + 1;
 
@@ -110,36 +109,41 @@ export default function BracketTree({
       style={{
         display: 'inline-flex',
         flexDirection: 'column',
-        padding: '2rem 1.5rem',
+        padding: '1.5rem 1rem',
         minWidth: 'max-content',
         userSelect: 'none',
+        position: 'relative',
+        zIndex: 10,
       }}
     >
-      {/* Top Round Column Headers */}
+      {/* Top Round Column Headers (Arabic) Centered directly above each column */}
       <div
         style={{
           display: 'flex',
-          marginBottom: '1.25rem',
-          paddingBottom: '0.5rem',
-          borderBottom: '0.0625rem solid #E2E8F0',
+          alignItems: 'center',
+          marginBottom: '1.5rem',
         }}
       >
         {rounds.map((r, idx) => {
           const isFinal = idx === rounds.length - 1;
           return (
-            <div
-              key={r.roundIndex}
-              style={{
-                width: '14.5rem',
-                marginRight: isFinal ? 0 : '4rem',
-                fontSize: '0.8125rem',
-                fontWeight: 700,
-                color: isFinal ? '#F59E0B' : '#64748B',
-                letterSpacing: '0.04rem',
-              }}
-            >
-              {r.name}
-            </div>
+            <React.Fragment key={r.roundIndex}>
+              <div
+                style={{
+                  width: '14.5rem',
+                  textAlign: 'center',
+                  fontSize: '1.125rem',
+                  fontWeight: 800,
+                  color: isFinal ? '#0284C7' : '#0F2942',
+                  letterSpacing: '0.02rem',
+                }}
+              >
+                {r.name}
+              </div>
+              {!isFinal && (
+                <div style={{ width: '4rem', flexShrink: 0 }} />
+              )}
+            </React.Fragment>
           );
         })}
       </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTournament } from '../context/TournamentContext';
 import BracketTree from './BracketTree';
+import { HeaderGeometricPattern } from './common/AcademicThemeDecorations';
 import { 
   Trophy, 
   Tv, 
@@ -14,7 +15,8 @@ import {
   Check,
   X,
   Layers,
-  ListPlus
+  ListPlus,
+  Home
 } from 'lucide-react';
 
 export default function AdminView() {
@@ -39,14 +41,12 @@ export default function AdminView() {
     '#10B981', // green
     '#1E1B4B', // navy
     '#D946EF', // magenta
-    '#4F46E5', // purple
+    '#0284C7', // blue
     '#06B6D4', // cyan
-    '#FBCFE8', // light pink
-    '#991B1B', // dark red
+    '#F472B6', // pink
+    '#DC2626', // red
     '#F59E0B', // amber
-    '#3B82F6', // blue
-    '#6366F1', // indigo
-    '#EC4899', // pink
+    '#4F46E5', // indigo
     '#84CC16', // lime
   ];
 
@@ -81,44 +81,33 @@ export default function AdminView() {
     <div
       style={{
         minHeight: '100vh',
-        backgroundColor: '#F1F5F9',
+        backgroundColor: '#F8FAFC',
         display: 'flex',
         flexDirection: 'column',
       }}
     >
-      {/* Top Admin Header */}
+      {/* Top Header Banner matching the design */}
       <header
         style={{
-          padding: '0.875rem 2rem',
-          backgroundColor: '#FFFFFF',
-          borderBottom: '0.0625rem solid #E2E8F0',
+          height: '5rem',
+          padding: '0 2rem',
+          backgroundColor: '#062548',
+          backgroundImage: 'linear-gradient(90deg, #051D38 0%, #0B3560 50%, #072343 100%)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          boxShadow: '0 0.0625rem 0.25rem rgba(0, 0, 0, 0.04)',
           position: 'sticky',
           top: 0,
           zIndex: 30,
+          boxShadow: '0 0.25rem 1rem rgba(5, 29, 56, 0.25)',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div
-            style={{
-              width: '2.25rem',
-              height: '2.25rem',
-              borderRadius: '0.5rem',
-              backgroundColor: '#1E293B',
-              color: '#FFFFFF',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Trophy size="1.25rem" color="#FACC15" />
-          </div>
+        <HeaderGeometricPattern />
+
+        <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <h1 style={{ fontSize: '1.125rem', fontWeight: 800, color: '#0F172A', margin: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <h1 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#FFFFFF', margin: 0 }}>
                 لوحة التحكم والإدارة (Admin Panel)
               </h1>
               <span
@@ -126,8 +115,9 @@ export default function AdminView() {
                   fontSize: '0.6875rem',
                   padding: '0.125rem 0.5rem',
                   borderRadius: '0.25rem',
-                  backgroundColor: '#EFF6FF',
-                  color: '#2563EB',
+                  backgroundColor: 'rgba(56, 189, 248, 0.2)',
+                  border: '0.0625rem solid rgba(56, 189, 248, 0.4)',
+                  color: '#BAE6FD',
                   fontWeight: 700,
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -138,14 +128,14 @@ export default function AdminView() {
                 <span>حجم الشجرة: {bracketData.bracketSize} مقاعد ({activeCount} متسابق)</span>
               </span>
             </div>
-            <div style={{ fontSize: '0.75rem', color: '#64748B' }}>
-              إضافة وحذف المتسابقين وتحديد الفائز مع التأهل الأوتوماتيكي للدور التالي
+            <div style={{ fontSize: '0.75rem', color: '#94A3B8' }}>
+              التحكم بمن سيفوز، إضافة أو مسح المتسابقين، والتأهل الأوتوماتيكي
             </div>
           </div>
         </div>
 
-        {/* Header Right Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        {/* Top Right Actions */}
+        <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <button
             onClick={() => {
               if (window.confirm('هل تريد إعادة تعيين المتسابقين والمباريات إلى الحالة الافتراضية؟')) {
@@ -158,9 +148,9 @@ export default function AdminView() {
               gap: '0.375rem',
               padding: '0.45rem 0.75rem',
               borderRadius: '0.375rem',
-              backgroundColor: '#FEE2E2',
-              color: '#DC2626',
-              border: 'none',
+              backgroundColor: 'rgba(239, 68, 68, 0.2)',
+              border: '0.0625rem solid rgba(239, 68, 68, 0.4)',
+              color: '#FCA5A5',
               fontSize: '0.8125rem',
               fontWeight: 600,
               cursor: 'pointer',
@@ -178,11 +168,12 @@ export default function AdminView() {
               gap: '0.5rem',
               padding: '0.5rem 1rem',
               borderRadius: '0.375rem',
-              backgroundColor: '#0F172A',
+              backgroundColor: '#0284C7',
               color: '#FFFFFF',
               textDecoration: 'none',
               fontSize: '0.8125rem',
               fontWeight: 700,
+              boxShadow: '0 0.125rem 0.5rem rgba(2, 132, 199, 0.3)',
             }}
           >
             <Tv size="1rem" />
@@ -191,9 +182,20 @@ export default function AdminView() {
         </div>
       </header>
 
-      {/* Main Content Area */}
+      {/* Cyan Accent Stripe */}
+      <div
+        style={{
+          height: '0.25rem',
+          background: 'linear-gradient(90deg, #0284C7 0%, #38BDF8 50%, #00A3E0 100%)',
+          position: 'sticky',
+          top: '5rem',
+          zIndex: 30,
+        }}
+      />
+
+      {/* Main Container */}
       <main style={{ padding: '1.5rem 2rem', maxWidth: '96rem', margin: '0 auto', width: '100%' }}>
-        {/* Instruction Alert Banner */}
+        {/* Helper Banner */}
         <div
           style={{
             padding: '0.875rem 1.25rem',
@@ -207,9 +209,9 @@ export default function AdminView() {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <Sparkles size="1.25rem" color="#2563EB" />
-            <div style={{ fontSize: '0.875rem', color: '#1E40AF', fontWeight: 600 }}>
-              💡 <strong>التأهل الأوتوماتيكي:</strong> اضغط مباشرة على اسم أي متسابق داخل المربع لتحديده كفائز، وسيقوم النظام فوراً بنقله للدور القادم لملاقاة الفائز من المباراة المقابلة له!
+            <Sparkles size="1.25rem" color="#0284C7" />
+            <div style={{ fontSize: '0.875rem', color: '#0369A1', fontWeight: 600 }}>
+              💡 <strong>التحكم المباشر:</strong> اضغط على أي متسابق داخل المربع لتحديده كفائز، وسيقوم النظام بنقله أوتوماتيكياً للدور التالي لملاقاة الفائز الآخر!
             </div>
           </div>
           {champion && (
@@ -219,7 +221,7 @@ export default function AdminView() {
           )}
         </div>
 
-        {/* 1. Interactive Tournament Tree with Real-time Click-to-Win */}
+        {/* 1. Interactive Tournament Bracket with Click-To-Win */}
         <div
           style={{
             backgroundColor: '#FFFFFF',
@@ -244,12 +246,9 @@ export default function AdminView() {
               <h2 style={{ fontSize: '1rem', fontWeight: 800, color: '#0F172A', margin: 0 }}>
                 مخطط المباريات التفاعلي (اضغط على الفائز للتأهل أوتوماتيكياً)
               </h2>
-              <span style={{ fontSize: '0.75rem', color: '#10B981', fontWeight: 700 }}>
-                (تحكم فوري)
-              </span>
             </div>
             <span style={{ fontSize: '0.75rem', color: '#64748B' }}>
-              كل متسابق في خانة منفصلة بدقة وبدون أي تكرار
+              كل متسابق في خانة مستقلة تماماً
             </span>
           </div>
 
@@ -260,7 +259,7 @@ export default function AdminView() {
           />
         </div>
 
-        {/* 2. Contestant Management (Add, Edit, Delete, Color Picker) */}
+        {/* 2. Contestant Management */}
         <div
           style={{
             display: 'grid',
@@ -289,7 +288,7 @@ export default function AdminView() {
                 style={{
                   background: 'transparent',
                   border: 'none',
-                  color: '#2563EB',
+                  color: '#0284C7',
                   fontSize: '0.75rem',
                   fontWeight: 600,
                   cursor: 'pointer',
@@ -327,7 +326,7 @@ export default function AdminView() {
                   <input
                     type="text"
                     required
-                    placeholder="مثال: Ahmed أو Ninja"
+                    placeholder="مثال: Catman أو BoYata"
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
                     style={{
@@ -391,7 +390,7 @@ export default function AdminView() {
                   gap: '0.5rem',
                   padding: '0.625rem',
                   borderRadius: '0.375rem',
-                  backgroundColor: isSubmitting ? '#94A3B8' : '#2563EB',
+                  backgroundColor: isSubmitting ? '#94A3B8' : '#0284C7',
                   color: '#FFFFFF',
                   border: 'none',
                   fontWeight: 700,
@@ -406,7 +405,7 @@ export default function AdminView() {
             </form>
           </div>
 
-          {/* List of Current Contestants with Delete & Edit */}
+          {/* List of Current Contestants */}
           <div
             style={{
               backgroundColor: '#FFFFFF',
@@ -482,7 +481,7 @@ export default function AdminView() {
                               fontSize: '0.8125rem',
                               padding: '0.2rem 0.4rem',
                               borderRadius: '0.25rem',
-                              border: '0.0625rem solid #2563EB',
+                              border: '0.0625rem solid #0284C7',
                               width: '100%',
                             }}
                           />

@@ -1,29 +1,29 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 
-const STORAGE_KEY = 'dynamic_tournament_bracket_v4';
+const STORAGE_KEY = 'academic_tournament_bracket_v1';
 
 const DEFAULT_PARTICIPANTS = [
   { id: 'p1', name: 'Catman', color: '#10B981', status: 'normal' },
-  { id: 'p2', name: 'AureliUS', color: '#1E1B4B', status: 'disconnected' },
+  { id: 'p2', name: 'Aurelius', color: '#1E1B4B', status: 'disconnected' },
   { id: 'p3', name: 'BoYata', color: '#D946EF', status: 'freewin' },
-  { id: 'p4', name: 'woody', color: '#4F46E5', status: 'normal' },
+  { id: 'p4', name: 'woody', color: '#0284C7', status: 'normal' },
   { id: 'p5', name: 'rqm', color: '#06B6D4', status: 'normal' },
-  { id: 'p6', name: 'EG|Tryhard', color: '#FBCFE8', status: 'normal' },
-  { id: 'p7', name: 'ElBee', color: '#991B1B', status: 'normal' },
+  { id: 'p6', name: 'EG|Tryhard', color: '#F472B6', status: 'normal' },
+  { id: 'p7', name: 'ElBee', color: '#DC2626', status: 'normal' },
   { id: 'p8', name: 'Bad Boy', color: '#F59E0B', status: 'normal' },
 ];
 
 const DEFAULT_STATE = {
-  tournamentTitle: 'TOURNAMENT BRACKET',
+  tournamentTitle: 'TOURNAMENT BRACKET DASHBOARD / لوحة عرض جدول المباريات والتصفيات',
   participants: DEFAULT_PARTICIPANTS,
   winners: {
-    'r0_m0': 'p1',
-    'r0_m1': 'p3',
-    'r0_m2': 'p4',
-    'r0_m3': 'p6',
-    'r1_m0': 'p1',
-    'r1_m1': 'p6',
-    'r2_m0': null,
+    'r0_m0': 'p1', // Catman beat Aurelius in QF1
+    'r0_m1': 'p3', // BoYata beat woody in QF2
+    'r0_m2': 'p5', // rqm beat EG|Tryhard in QF3
+    'r0_m3': 'p7', // ElBee beat Bad Boy in QF4
+    'r1_m0': 'p1', // Catman beat BoYata in SF1
+    'r1_m1': 'p5', // rqm beat ElBee in SF2
+    'r2_m0': null, // Finals Catman vs rqm
   },
 };
 
@@ -75,7 +75,7 @@ export function TournamentProvider({ children }) {
     [state.participants]
   );
 
-  // Dynamic bracket builder for any number of contestants (2, 3, 4, 5, 8, 12, 16, 24, 32...)
+  // Dynamic bracket builder for any number of contestants (2, 4, 8, 16, 32...)
   const bracketData = useMemo(() => {
     const rawList = state.participants.filter((p) => p && p.name && p.name.trim() !== '');
     const count = Math.max(rawList.length, 2);
@@ -91,17 +91,18 @@ export function TournamentProvider({ children }) {
 
     const totalRounds = Math.log2(bracketSize);
 
+    // Arabic round titles matching the user's design
     const getRoundName = (roundIdx, total) => {
       const remaining = total - roundIdx;
-      if (remaining === 1) return 'Finals';
-      if (remaining === 2) return 'Semifinals';
-      if (remaining === 3) return 'Quarterfinals';
-      if (remaining === 4) return 'Round of 16';
-      if (remaining === 5) return 'Round of 32';
-      return `Round ${roundIdx + 1}`;
+      if (remaining === 1) return 'النهائي';
+      if (remaining === 2) return 'نصف النهائي';
+      if (remaining === 3) return 'ربع النهائي';
+      if (remaining === 4) return 'دور الـ 16';
+      if (remaining === 5) return 'دور الـ 32';
+      return `الدور ${roundIdx + 1}`;
     };
 
-    // Round 0 Matches: strictly one unique player per slot!
+    // Round 0 Matches
     const round0Matches = [];
     const numRound0Matches = bracketSize / 2;
 
@@ -236,7 +237,6 @@ export function TournamentProvider({ children }) {
   const addParticipant = useCallback((names, color = '#10B981') => {
     if (!names) return;
 
-    // Support single name string or array of names or multi-line string
     let namesList = [];
     if (Array.isArray(names)) {
       namesList = names;
@@ -293,7 +293,7 @@ export function TournamentProvider({ children }) {
     }));
   }, []);
 
-  // Reset to default sample
+  // Reset to default sample matching the image
   const resetBracket = useCallback(() => {
     setState(DEFAULT_STATE);
   }, []);
