@@ -16,10 +16,11 @@ import {
   X,
   Layers,
   ListPlus,
-  Home
+  Home,
+  LogOut
 } from 'lucide-react';
 
-export default function AdminView() {
+export default function AdminView({ onLogout }) {
   const { 
     participants, 
     bracketData, 
@@ -136,6 +137,31 @@ export default function AdminView() {
 
         {/* Top Right Actions */}
         <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          {/* Logout Button */}
+          <button
+            onClick={() => {
+              if (window.confirm('هل تريد تسجيل الخروج؟')) {
+                onLogout && onLogout();
+              }
+            }}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.375rem',
+              padding: '0.45rem 0.75rem',
+              borderRadius: '0.375rem',
+              backgroundColor: 'rgba(248, 113, 113, 0.15)',
+              border: '0.0625rem solid rgba(248, 113, 113, 0.4)',
+              color: '#FCA5A5',
+              fontSize: '0.8125rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+            }}
+          >
+            <LogOut size="0.875rem" />
+            <span>تسجيل الخروج</span>
+          </button>
+
           <button
             onClick={() => {
               if (window.confirm('هل تريد إعادة تعيين المتسابقين والمباريات إلى الحالة الافتراضية؟')) {
