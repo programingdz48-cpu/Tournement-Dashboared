@@ -89,14 +89,17 @@ export default function AdminView({ onLogout }) {
     >
       {/* Top Header Banner matching the design */}
       <header
+        className="admin-header-inner"
         style={{
-          height: '5rem',
-          padding: '0 2rem',
+          minHeight: '4rem',
+          padding: '0.75rem 1.25rem',
           backgroundColor: '#062548',
           backgroundImage: 'linear-gradient(90deg, #051D38 0%, #0B3560 50%, #072343 100%)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '0.5rem',
           position: 'sticky',
           top: 0,
           zIndex: 30,
@@ -107,8 +110,8 @@ export default function AdminView({ onLogout }) {
 
         <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <h1 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#FFFFFF', margin: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+              <h1 style={{ fontSize: 'clamp(0.8rem, 2.5vw, 1.25rem)', fontWeight: 800, color: '#FFFFFF', margin: 0 }}>
                 لوحة التحكم والإدارة (Admin Panel)
               </h1>
               <span
@@ -123,20 +126,21 @@ export default function AdminView({ onLogout }) {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.25rem',
+                  whiteSpace: 'nowrap',
                 }}
               >
                 <Layers size="0.6875rem" />
-                <span>حجم الشجرة: {bracketData.bracketSize} مقاعد ({activeCount} متسابق)</span>
+                <span>{bracketData.bracketSize} مقاعد ({activeCount} متسابق)</span>
               </span>
             </div>
-            <div style={{ fontSize: '0.75rem', color: '#94A3B8' }}>
+            <div style={{ fontSize: '0.7rem', color: '#94A3B8', marginTop: '0.1rem' }}>
               التحكم بمن سيفوز، إضافة أو مسح المتسابقين، والتأهل الأوتوماتيكي
             </div>
           </div>
         </div>
 
         {/* Top Right Actions */}
-        <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div className="admin-header-actions" style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
           {/* Logout Button */}
           <button
             onClick={() => {
@@ -214,15 +218,16 @@ export default function AdminView({ onLogout }) {
           height: '0.25rem',
           background: 'linear-gradient(90deg, #0284C7 0%, #38BDF8 50%, #00A3E0 100%)',
           position: 'sticky',
-          top: '5rem',
+          top: '4rem',
           zIndex: 30,
         }}
       />
 
       {/* Main Container */}
-      <main style={{ padding: '1.5rem 2rem', maxWidth: '96rem', margin: '0 auto', width: '100%' }}>
+      <main style={{ padding: '1rem', maxWidth: '96rem', margin: '0 auto', width: '100%' }}>
         {/* Helper Banner */}
         <div
+          className="admin-info-banner"
           style={{
             padding: '0.875rem 1.25rem',
             borderRadius: '0.5rem',
@@ -231,6 +236,8 @@ export default function AdminView({ onLogout }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '0.5rem',
             marginBottom: '1.5rem',
           }}
         >
@@ -278,18 +285,21 @@ export default function AdminView({ onLogout }) {
             </span>
           </div>
 
-          <BracketTree
-            bracketData={bracketData}
-            isAdmin={true}
-            onSelectWinner={setMatchWinner}
-          />
+          <div className="bracket-scroll-wrapper">
+            <BracketTree
+              bracketData={bracketData}
+              isAdmin={true}
+              onSelectWinner={setMatchWinner}
+            />
+          </div>
         </div>
 
         {/* 2. Contestant Management */}
         <div
+          className="admin-bottom-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: '1.2fr 2fr',
+            gridTemplateColumns: 'minmax(0, 1.2fr) minmax(0, 2fr)',
             gap: '1.5rem',
             alignItems: 'start',
           }}

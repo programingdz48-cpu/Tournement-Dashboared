@@ -14,7 +14,8 @@
 }
 
 html {
-  font-size: clamp(14px, 1.1vw, 20px);
+  /* On mobile keep 15px; on large screens scale up to 18px */
+  font-size: clamp(15px, 2.5vw, 18px);
   box-sizing: border-box;
 }
 
@@ -116,4 +117,65 @@ body {
 
 .admin-player-button:hover {
   filter: brightness(0.96);
+}
+
+/* ===== MOBILE RESPONSIVENESS ===== */
+
+/* Bracket scroll wrapper */
+.bracket-scroll-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Hint for touch scrolling */
+  scroll-snap-type: x proximity;
+}
+
+/* Mobile: shrink match card width */
+@media (max-width: 48rem) {
+  .bracket-match-card {
+    width: 10rem;
+  }
+
+  /* Admin header: stack vertically */
+  .admin-header-inner {
+    flex-wrap: wrap !important;
+    min-height: auto !important;
+    padding: 0.75rem 1rem !important;
+    gap: 0.5rem !important;
+  }
+
+  /* Admin header actions: wrap buttons */
+  .admin-header-actions {
+    flex-wrap: wrap !important;
+    gap: 0.4rem !important;
+  }
+
+  .admin-header-actions button,
+  .admin-header-actions a {
+    font-size: 0.7rem !important;
+    padding: 0.35rem 0.5rem !important;
+  }
+
+  /* Admin bottom grid: stack vertically on mobile */
+  .admin-bottom-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Main padding reduced */
+  main[style] {
+    padding: 0.75rem !important;
+  }
+
+  /* Info banner text smaller */
+  .admin-info-banner > div {
+    font-size: 0.75rem !important;
+  }
+
+  /* Bracket card: even smaller on very small screens */
+}
+
+@media (max-width: 30rem) {
+  .bracket-match-card {
+    width: 8.5rem;
+  }
 }
