@@ -1,6 +1,9 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import { db } from '../firebase';
+import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 
 const STORAGE_KEY = 'academic_tournament_bracket_v1';
+const TOURNAMENT_DOC_ID = 'main_bracket';
 
 const DEFAULT_PARTICIPANTS = [
   { id: 'p1', name: 'Catman', color: '#10B981', status: 'normal' },
@@ -40,16 +43,39 @@ export function TournamentProvider({ children }) {
     return DEFAULT_STATE;
   });
 
-  // Automatically persist to localStorage whenever state changes
+  // 1. Real-time synchronization across all devices via Firebase Cloud Firestore
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch (e) {
-      console.error('Error saving to localStorage:', e);
-    }
-  }, [state]);
+    const tournamentRef = doc(db, 'tournaments', TOURNAMENT_DOC_ID);
+    
+    const unsubscribe = onSnapshot(
+      tournamentRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const cloudData = docSnap.data();
+          if (cloudData && Array.isArray(cloudData.participants)) {
+            setState(cloudData);
+            try {
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(cloudData));
+            } catch (err) {
+              console.error('Error caching to localStorage:', err);
+            }
+          }
+        } else {
+          // Initialize in Firestore on first use
+          setDoc(tournamentRef, DEFAULT_STATE).catch((err) => {
+            console.warn('Initial doc creation info:', err);
+          });
+        }
+      },
+      (error) => {
+        console.warn('Firestore snapshot error (check Firestore Security Rules):', error);
+      }
+    );
 
-  // Synchronize across browser tabs in real-time
+    return () => unsubscribe();
+  }, []);
+
+  // 2. Also keep localStorage synced across same-device browser tabs
   useEffect(() => {
     const handleStorage = (e) => {
       if (e.key === STORAGE_KEY && e.newValue) {
@@ -64,6 +90,32 @@ export function TournamentProvider({ children }) {
 
     window.addEventListener('storage', handleStorage);
     return () => window.removeEventListener('storage', handleStorage);
+  }, []);
+
+  // Helper to persist state both locally and to Cloud Firestore
+  const saveStateAndSync = useCallback((updater) => {
+    setState((prev) => {
+      const nextState = typeof updater === 'function' ? updater(prev) : updater;
+      
+      // Cache locally
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(nextState));
+      } catch (e) {
+        console.error('Error saving to localStorage:', e);
+      }
+
+      // Sync to Cloud Firestore (instantly reaches all mobile phones, PCs, TVs)
+      try {
+        const tournamentRef = doc(db, 'tournaments', TOURNAMENT_DOC_ID);
+        setDoc(tournamentRef, nextState).catch((err) => {
+          console.warn('Firestore sync failed (check Rules if permission denied):', err);
+        });
+      } catch (err) {
+        console.warn('Firestore setDoc call error:', err);
+      }
+
+      return nextState;
+    });
   }, []);
 
   // Helper to find participant by id
@@ -196,7 +248,7 @@ export function TournamentProvider({ children }) {
 
   // Set match winner and advance to next round
   const setMatchWinner = useCallback((matchId, winnerId) => {
-    setState((prev) => {
+    saveStateAndSync((prev) => {
       const isAlreadyWinner = prev.winners[matchId] === winnerId;
       const newWinnerId = isAlreadyWinner ? null : winnerId;
 
@@ -231,7 +283,7 @@ export function TournamentProvider({ children }) {
         winners: nextWinners,
       };
     });
-  }, []);
+  }, [saveStateAndSync]);
 
   // Add a single participant or multiple participants
   const addParticipant = useCallback((names, color = '#10B981') => {
@@ -249,7 +301,7 @@ export function TournamentProvider({ children }) {
 
     if (namesList.length === 0) return;
 
-    setState((prev) => {
+    saveStateAndSync((prev) => {
       const newEntries = namesList.map((name, idx) => ({
         id: 'p_' + Date.now().toString(36) + '_' + idx + '_' + Math.random().toString(36).substring(2, 6),
         name,
@@ -262,11 +314,11 @@ export function TournamentProvider({ children }) {
         participants: [...prev.participants, ...newEntries],
       };
     });
-  }, []);
+  }, [saveStateAndSync]);
 
   // Delete participant
   const deleteParticipant = useCallback((participantId) => {
-    setState((prev) => {
+    saveStateAndSync((prev) => {
       const filtered = prev.participants.filter((p) => p.id !== participantId);
       const cleanedWinners = {};
       Object.entries(prev.winners).forEach(([k, v]) => {
@@ -281,22 +333,22 @@ export function TournamentProvider({ children }) {
         winners: cleanedWinners,
       };
     });
-  }, []);
+  }, [saveStateAndSync]);
 
   // Update participant details
   const updateParticipant = useCallback((participantId, updates) => {
-    setState((prev) => ({
+    saveStateAndSync((prev) => ({
       ...prev,
       participants: prev.participants.map((p) =>
         p.id === participantId ? { ...p, ...updates } : p
       ),
     }));
-  }, []);
+  }, [saveStateAndSync]);
 
   // Reset to default sample matching the image
   const resetBracket = useCallback(() => {
-    setState(DEFAULT_STATE);
-  }, []);
+    saveStateAndSync(DEFAULT_STATE);
+  }, [saveStateAndSync]);
 
   const value = {
     participants: state.participants,
