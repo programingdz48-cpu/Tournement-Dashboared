@@ -16,7 +16,7 @@ import {
   Minimize2, 
   Trophy 
 } from 'lucide-react';
-import logoImg from '../assets/logo.jpg';
+import logoImg from '../assets/logo.png';
 
 export default function DashboardView() {
   const { bracketData } = useTournament();
@@ -230,10 +230,11 @@ export default function DashboardView() {
         style={{
           position: 'absolute',
           top: '6.5rem',
-          right: '3.5rem',
-          width: 'clamp(9rem, 12vw, 15rem)',
-          height: 'clamp(9rem, 12vw, 15rem)',
+          right: '3rem',
+          width: 'clamp(9.5rem, 12.5vw, 15.5rem)',
+          height: 'clamp(9.5rem, 12.5vw, 15.5rem)',
           zIndex: 6,
+          display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           pointerEvents: 'none',
@@ -246,8 +247,7 @@ export default function DashboardView() {
             width: '100%',
             height: '100%',
             objectFit: 'contain',
-            borderRadius: '50%',
-            filter: 'drop-shadow(0 0.5rem 1.5rem rgba(6, 37, 72, 0.25))',
+            filter: 'drop-shadow(0 0.75rem 2rem rgba(6, 37, 72, 0.2)) drop-shadow(0 0.125rem 0.5rem rgba(56, 189, 248, 0.35))',
           }}
         />
       </div>
