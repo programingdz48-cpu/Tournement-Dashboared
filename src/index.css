@@ -121,6 +121,18 @@ body {
 
 /* ===== MOBILE RESPONSIVENESS ===== */
 
+/* Right-side Club Logo: shown on TV & Desktop, hidden on mobile & tablets */
+.dashboard-right-logo {
+  display: flex;
+  transition: opacity 0.3s ease;
+}
+
+@media (max-width: 64rem) {
+  .dashboard-right-logo {
+    display: none !important;
+  }
+}
+
 /* Bracket scroll wrapper */
 .bracket-scroll-wrapper {
   width: 100%;

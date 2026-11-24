@@ -16,6 +16,7 @@ import {
   Minimize2, 
   Trophy 
 } from 'lucide-react';
+import logoImg from '../assets/logo.jpg';
 
 export default function DashboardView() {
   const { bracketData } = useTournament();
@@ -223,6 +224,34 @@ export default function DashboardView() {
       </main>
 
       {/* ================= DECORATIVE ARTWORK (MATCHING SCREENSHOT) ================= */}
+      {/* Club Logo in the white space above the right-side books (TV & Desktop only) */}
+      <div
+        className="dashboard-right-logo"
+        style={{
+          position: 'absolute',
+          top: '6.5rem',
+          right: '3.5rem',
+          width: 'clamp(9rem, 12vw, 15rem)',
+          height: 'clamp(9rem, 12vw, 15rem)',
+          zIndex: 6,
+          alignItems: 'center',
+          justifyContent: 'center',
+          pointerEvents: 'none',
+        }}
+      >
+        <img
+          src={logoImg}
+          alt="شعار نادي وسطاء الكتاب، القراءة والمطالعة - جامعة جيلالي ليابس"
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+            borderRadius: '50%',
+            filter: 'drop-shadow(0 0.5rem 1.5rem rgba(6, 37, 72, 0.25))',
+          }}
+        />
+      </div>
+
       {/* 1. Bottom-Left Stack of 3 Blue Hardcover Books & Wave */}
       <BottomLeftBooksWave />
 
